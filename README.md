@@ -16,6 +16,7 @@
 or
 
 > npm install
+
 > npm link
 
 - Run project:
