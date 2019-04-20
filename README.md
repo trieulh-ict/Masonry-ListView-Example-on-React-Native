@@ -19,6 +19,6 @@ or
 
 > npm link
 
-- Run project:
+### Run project:
 
 > npm run ios
