@@ -1,20 +1,20 @@
 export class DataCall {
   // Just simulating incremental loading, don't infer anything from here
   static async get(start, count) {
-    const responseHusky = await fetch(
+    const firstResponse = await fetch(
       "http://5cb9f093f841d2001455e8fe.mockapi.io/paris"
     );
-    const responseBeagle = await fetch(
+    const secondResponse = await fetch(
       "http://5cb9f093f841d2001455e8fe.mockapi.io/paris"
     );
-    console.log(responseHusky);
+    console.log(firstResponse);
 
-    const responseJsonHusky = await responseHusky.json();
-    const responseJsonBeagle = await responseBeagle.json();
+    const firstResponseJson = await firstResponse.json();
+    const secondResponseJson = await secondResponse.json();
     
-    console.log(responseJsonBeagle)
-    const fullData = responseJsonHusky.message.concat(
-      responseJsonBeagle.message
+    console.log(secondResponseJson)
+    const fullData = firstResponseJson.message.concat(
+      secondResponseJson.message
     );
 
     const filteredData = fullData.slice(
