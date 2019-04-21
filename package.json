@@ -9,6 +9,7 @@
     "ios": "react-native run-ios --simulator=\"iPhone 7 Plus\""
   },
   "dependencies": {
+    "lodash": "^4.17.11",
     "react": "16.8.3",
     "react-native": "0.59.5",
     "recyclerlistview": "file:external/recyclerlistview"

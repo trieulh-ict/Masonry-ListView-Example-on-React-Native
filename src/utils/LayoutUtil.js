@@ -6,7 +6,7 @@ export class LayoutUtil {
     // To deal with precision issues on android
     return Math.round(Dimensions.get("window").width * 1000) / 1000 - 6; //Adjustment for margin given to RLV;
   }
-  static getLayoutProvider(type) {
+  static getLayoutProvider(type, data) {
     switch (type) {
       case 0:
         return new LayoutProvider(
@@ -14,19 +14,15 @@ export class LayoutUtil {
             return "VSEL"; //Since we have just one view type
           },
           (type, dim, index) => {
+            dataElement = data[index];
             const columnWidth = LayoutUtil.getWindowWidth() / 2;
+            const columnHeight =
+              (columnWidth * dataElement.height) / dataElement.width;
             switch (type) {
               case "VSEL":
-                if (index % 3 === 0) {
-                  dim.width = columnWidth;
-                  dim.height = 300;
-                } else if (index % 2 === 0) {
-                  dim.width = columnWidth;
-                  dim.height = 200;
-                } else {
-                  dim.width = columnWidth;
-                  dim.height = 250;
-                }
+                dim.width = columnWidth;
+                dim.height = columnHeight;
+
                 break;
               default:
                 dim.width = 0;
