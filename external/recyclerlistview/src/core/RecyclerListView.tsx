@@ -178,18 +178,18 @@ export default class RecyclerListView extends React.Component<RecyclerListViewPr
   }
 
   public componentDidUpdate(): void {
-    if (this._pendingScrollToOffset) {
-      const offset = this._pendingScrollToOffset;
-      this._pendingScrollToOffset = null;
-      if (this.props.isHorizontal) {
-        offset.y = 0;
-      } else {
-        offset.x = 0;
-      }
-      setTimeout(() => {
-        this.scrollToOffset(offset.x, offset.y, false);
-      }, 0);
-    }
+    // if (this._pendingScrollToOffset) {
+    //   const offset = this._pendingScrollToOffset;
+    //   this._pendingScrollToOffset = null;
+    //   if (this.props.isHorizontal) {
+    //     offset.y = 0;
+    //   } else {
+    //     offset.x = 0;
+    //   }
+    //   setTimeout(() => {
+    //     this.scrollToOffset(offset.x, offset.y, false);
+    //   }, 0);
+    // }
     this._processOnEndReached();
     this._checkAndChangeLayouts(this.props);
   }

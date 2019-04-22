@@ -34,7 +34,7 @@ export default class App extends Component {
 
   renderFooter = () => {
     return this.state.inProgress ? (
-      <ActivityIndicator style={{ margin: 10 }} size="large" color={"black"} />
+      <ActivityIndicator style={{ margin: 10 }} size="small" color={"black"} />
     ) : (
       <View style={{ height: 60 }} />
     );
@@ -131,6 +131,7 @@ export default class App extends Component {
             layoutProvider={this.state.layoutProvider}
             rowRenderer={this.rowRenderer}
             renderFooter={this.renderFooter}
+            onEndReachedThreshold={300}
             disableRecycling={true}
           />
         ) : null}
