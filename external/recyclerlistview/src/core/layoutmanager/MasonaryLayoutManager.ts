@@ -85,6 +85,8 @@ export default class MasonaryLayoutManager implements LayoutManagerInterface {
       columnLenghts[idx] = 0;
     }
     const minColumnIdxFn = (cols: number[]) => cols.reduce((acc, val, idx, arr) => (val < arr[acc] ? idx : acc), 0);
+    const maxColumnIdxFn = () => columnLenghts.reduce((acc, val, idx, arr) => (arr[acc] > val ? acc : idx), 0);
+
     const colLenght = (this._isHorizontal ? this._window.height : this._window.width) / this._columnCount;
     for (let i = startIndex; i < itemCount; i++) {
       const oldLayout = this._layouts[i];
@@ -100,6 +102,15 @@ export default class MasonaryLayoutManager implements LayoutManagerInterface {
       startY = columnLenghts[minColumnIdx];
       startX = colLenght * minColumnIdx;
 
+      if (this._isHorizontal) {
+        
+      } else {
+        if (itemDim.width > colLenght) {
+          startY = columnLenghts[maxColumnIdxFn()];
+          startX = 0;
+        }
+      }
+
       newLayouts.push({ x: startX, y: startY, height: itemDim.height, width: itemDim.width });
 
       if (this._isHorizontal) {
@@ -111,12 +122,19 @@ export default class MasonaryLayoutManager implements LayoutManagerInterface {
         }
         startX = columnLenghts[minColumnIdxFn(columnLenghts)];
       } else {
-        columnLenghts[minColumnIdx] += itemDim.height;
+        if (itemDim.width > colLenght) {
+          columnLenghts[maxColumnIdxFn()] += itemDim.height;  
+          let currentMaxHeight = columnLenghts[maxColumnIdxFn()];
+          for (let idx = 0; idx < this._columnCount; idx++) {
+            if(idx != maxColumnIdxFn())
+              columnLenghts[idx] = currentMaxHeight;
+          }
+        } else {
+          columnLenghts[minColumnIdx] += itemDim.height;  
+        }
       }
     }
     this._layouts = newLayouts;
-
-    const maxColumnIdxFn = () => columnLenghts.reduce((acc, val, idx, arr) => (arr[acc] > val ? acc : idx), 0);
 
     if (this._isHorizontal) {
       this._totalHeight = this._window.height;
@@ -125,6 +143,10 @@ export default class MasonaryLayoutManager implements LayoutManagerInterface {
       this._totalWidth = this._window.width;
       this._totalHeight = columnLenghts[maxColumnIdxFn()];
     }
+    console.log("COLUMN LENGTH");
+    console.log(columnLenghts);
+    console.log("START");
+    console.log(startX + " "+ startY);
   }
 
   private _checkBounds(itemX: number, itemY: number, itemDim: Dimension, isHorizontal: boolean): boolean {

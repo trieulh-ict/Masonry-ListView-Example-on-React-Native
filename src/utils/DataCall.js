@@ -5,14 +5,6 @@ let data = [
   'https://i.imgur.com/BrhpQnV.jpg',
   'https://i.imgur.com/ScJRZpQ.jpg',
   'https://i.imgur.com/QtDkUZR.jpg',
-  'https://i.imgur.com/qeqpR8f.jpg',
-  'https://i.imgur.com/R1dFrxj.jpg',
-  'https://i.imgur.com/puTjEVW.jpg',
-  'https://i.imgur.com/UPd9gqk.jpg',
-  'https://i.imgur.com/p0pTlep.jpg',
-  'https://i.imgur.com/RQAEeB2.jpg',
-  'https://i.imgur.com/jiq2hh7.jpg',
-  'https://i.imgur.com/LEwaaPe.jpg',
 ];
 
 function sleep(ms) {
