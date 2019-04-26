@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ActivityIndicator, Image } from "react-native";
-import { DataProvider, RecyclerListView } from "recyclerlistview";
-import { LayoutUtil } from "./src/utils/LayoutUtil";
+import { DataProvider, RecyclerListView, LayoutType } from "recyclerlistview";
 import { DataCall } from "./src/utils/DataCall";
 import { ViewSelector } from "./src/components/ViewSelector";
 import { ImageRenderer } from "./src/components/ImageRenderer";
@@ -11,9 +10,9 @@ import uuidv1 from "uuid/v1";
 export default class App extends Component {
   state = {
     dataProvider: new DataProvider((r1, r2) => {
-      r1.key !== r2.key && r1.id != r2.id;
+      r1.key !== r2.key || r1.id != r2.id || r1.viewType !== r2.viewType;
     }),
-    layoutProvider: LayoutUtil.getLayoutProvider(0, []),
+    // layoutProvider: LayoutUtil.getLayoutProvider([]),
     images: [],
     newImages: [],
     viewType: 0,
@@ -27,7 +26,6 @@ export default class App extends Component {
 
   viewChangeHandler = viewType => {
     this.setState({
-      layoutProvider: LayoutUtil.getLayoutProvider(viewType),
       viewType: viewType
     });
   };
@@ -60,16 +58,17 @@ export default class App extends Component {
         );
         this.setState({
           inProgress: false,
-          dataProvider: this.state.dataProvider.cloneWithRows(newSortedArray),
+          // dataProvider: this.state.dataProvider.cloneWithRows(newSortedArray),
           images: newSortedArray,
-          layoutProvider: LayoutUtil.getLayoutProvider(
-            this.state.viewType,
-            newSortedArray
-          ),
+          // layoutProvider: LayoutUtil.getLayoutProvider(newSortedArray),
           newImages: []
         });
       }
     }, 500);
+  };
+
+  getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   async fetchMoreData() {
@@ -87,6 +86,10 @@ export default class App extends Component {
           let newImage = {
             id: id,
             key: uuidv1(),
+            viewType:
+              this.getRandomInt(1, 2) == 1
+                ? LayoutType.SINGLE
+                : LayoutType.SPAN,
             url: url,
             width: width,
             height: height
@@ -103,6 +106,10 @@ export default class App extends Component {
       });
     }
   }
+
+  rowHasChanged = (r1, r2) => {
+    r1.key !== r2.key || r1.id != r2.id || r1.viewType !== r2.viewType;
+  };
 
   getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -127,11 +134,13 @@ export default class App extends Component {
             style={{ flex: 1 }}
             contentContainerStyle={{ margin: 3 }}
             onEndReached={this.handleListEnd}
-            dataProvider={this.state.dataProvider}
-            layoutProvider={this.state.layoutProvider}
+            // dataProvider={this.state.dataProvider}
+            // layoutProvider={this.state.layoutProvider}
+            data={this.state.images}
+            rowHasChanged={this.rowHasChanged}
             rowRenderer={this.rowRenderer}
             renderFooter={this.renderFooter}
-            onEndReachedThreshold={300}
+            onEndReachedThreshold={100}
             disableRecycling={true}
           />
         ) : null}
