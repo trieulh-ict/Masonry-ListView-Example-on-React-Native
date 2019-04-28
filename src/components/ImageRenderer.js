@@ -5,7 +5,11 @@ const isIOS = Platform.OS === "ios";
 
 export class ImageRenderer extends React.Component {
   shouldComponentUpdate(newProps) {
-    return this.props.imageUrl !== newProps.imageUrl;
+    return (
+      this.props.imageUrl !== newProps.imageUrl ||
+      this.props.indexNumber !== newProps.indexNumber ||
+      this.props.keyString !== newProps.keyString
+    );
   }
   componentWillUpdate() {
     //On iOS while recycling till the new image is loaded the old one remains visible. This forcefully hides the old image.
@@ -42,7 +46,9 @@ export class ImageRenderer extends React.Component {
           onLoad={this.handleOnLoad}
           source={{ uri: this.props.imageUrl }}
         />
-        <Text>{this.props.indexNumber} {this.props.keyString}</Text>
+        <Text>
+          {this.props.indexNumber} {this.props.keyString}
+        </Text>
       </View>
     );
   }

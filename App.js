@@ -141,7 +141,6 @@ export default class App extends Component {
             rowRenderer={this.rowRenderer}
             renderFooter={this.renderFooter}
             onEndReachedThreshold={100}
-            disableRecycling={true}
           />
         ) : null}
       </View>
