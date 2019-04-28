@@ -6,6 +6,7 @@ import { ViewSelector } from "./src/components/ViewSelector";
 import { ImageRenderer } from "./src/components/ImageRenderer";
 import _ from "lodash";
 import uuidv1 from "uuid/v1";
+import { MyItemAnimator } from "./src/utils/MyItemAnimator";
 
 export default class App extends Component {
   state = {
@@ -15,7 +16,6 @@ export default class App extends Component {
     // layoutProvider: LayoutUtil.getLayoutProvider([]),
     images: [],
     newImages: [],
-    viewType: 0,
     inProgress: false
   };
 
@@ -24,9 +24,9 @@ export default class App extends Component {
     this.checkDataToUpdateUI();
   }
 
-  viewChangeHandler = viewType => {
+  removeFirstItem = () => {
     this.setState({
-      viewType: viewType
+      images: _.tail(this.state.images)
     });
   };
 
@@ -82,17 +82,18 @@ export default class App extends Component {
 
       images.forEach((url, index) => {
         let id = currentCount + index + 1;
-        Image.getSize(url, (width, height) => {
+        setTimeout(() => {
           let newImage = {
             id: id,
             key: uuidv1(),
-            viewType:
-              this.getRandomInt(1, 2) == 1
-                ? LayoutType.SINGLE
-                : LayoutType.SPAN,
+            viewType: LayoutType.SINGLE,
+            // viewType:
+            //   this.getRandomInt(1, 2) == 1
+            //     ? LayoutType.SINGLE
+            //     : LayoutType.SPAN,
             url: url,
-            width: width,
-            height: height
+            width: 100,
+            height: 100
           };
 
           this.setState(prevState => ({
@@ -102,7 +103,7 @@ export default class App extends Component {
               image => image.id
             )
           }));
-        });
+        }, id * 1000);
       });
     }
   }
@@ -124,16 +125,15 @@ export default class App extends Component {
     //Only render RLV once you have the data
     return (
       <View style={styles.container}>
-        <ViewSelector
-          viewType={this.state.viewType}
-          viewChange={this.viewChangeHandler}
-        />
+        <ViewSelector viewChange={this.removeFirstItem} />
         {this.state.images.length > 0 ? (
           <RecyclerListView
             ref={ref => (this._recyclerListView = ref)}
             style={{ flex: 1 }}
             contentContainerStyle={{ margin: 3 }}
             onEndReached={this.handleListEnd}
+            itemAnimator={new MyItemAnimator()}
+            optimizeForInsertDeleteAnimations={true}
             // dataProvider={this.state.dataProvider}
             // layoutProvider={this.state.layoutProvider}
             data={this.state.images}

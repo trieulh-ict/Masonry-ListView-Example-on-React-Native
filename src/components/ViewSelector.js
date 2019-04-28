@@ -4,14 +4,9 @@ import { Text, TouchableHighlight } from "react-native";
 export class ViewSelector extends React.Component {
   constructor(props) {
     super(props);
-    this.currentView = 0;
-  }
-  shouldComponentUpdate(newProps) {
-    return this.props.viewType !== newProps.viewType;
   }
   onPressHandler = () => {
-    this.currentView = (this.currentView + 1) % 4;
-    this.props.viewChange(this.currentView);
+    this.props.viewChange();
   };
   render() {
     return (
@@ -26,9 +21,7 @@ export class ViewSelector extends React.Component {
         }}
         onPress={this.onPressHandler}
       >
-        <Text style={{ color: "white" }}>
-          Tap to Change View Type: {this.props.viewType}
-        </Text>
+        <Text style={{ color: "white" }}>Remove First Item</Text>
       </TouchableHighlight>
     );
   }
